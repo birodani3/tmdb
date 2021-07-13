@@ -1,10 +1,19 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+
+import { slideIn } from './shared/animations';
 
 @Component({
-  selector: 'app-root',
+  selector: 'tmdb-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  animations: [slideIn]
 })
 export class AppComponent {
-  title = 'tmdb';
+  constructor() { }
+
+  public prepareRoute(outlet: RouterOutlet): string {
+    return outlet?.activatedRouteData?.animation;
+  }
 }

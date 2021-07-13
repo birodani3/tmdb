@@ -1,0 +1,12 @@
+<div class="search-bar-wrapper" [class.empty]="!value" [class.focused]="focused">
+  <input
+    matInput
+    type="text"
+    [(ngModel)]="value"
+    (ngModelChange)="valueChanged($event)"
+    (focus)="focused = true"
+    (blur)="focused = false"
+  >
+  <mat-icon class="search-icon">search</mat-icon>
+  <mat-icon class="close-icon clickable" (click)="clearSearch()">close</mat-icon>
+</div>

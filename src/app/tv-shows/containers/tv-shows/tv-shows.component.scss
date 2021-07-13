@@ -1,0 +1,13 @@
+.title {
+  h1 {
+    margin: 0;
+    padding: 24px 0 0 0;
+  }
+}
+
+.tv-shows-wrapper {
+  display: grid;
+  grid-gap: 24px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-auto-rows: 350px;
+}

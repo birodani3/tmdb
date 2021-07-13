@@ -1,0 +1,9 @@
+<div class="title">
+  <h1>{{ searchTerm ? '' : 'Trending ' }}Tv Shows {{ searchTerm ? '- "' + searchTerm + '"' : '' }}</h1>
+</div>
+<div class="search-wrapper">
+  <tmdb-search-bar (valueChange)="search($event)"></tmdb-search-bar>
+</div>
+<div class="tv-shows-wrapper">
+  <tmdb-card [@appear] *ngFor="let tvShow of tvShows$ | async" [cardData]="tvShow"></tmdb-card>
+</div>

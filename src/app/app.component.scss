@@ -1,0 +1,11 @@
+tmdb-header {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 9999;
+}
+
+.content-wrapper {
+  max-width: 1300px;
+  margin: 64px auto 16px auto;
+}

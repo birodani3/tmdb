@@ -1,0 +1,9 @@
+<mat-toolbar #toolbar>
+  <div href [routerLink]="['/']" class="logo clickable">TMDb</div>
+  <a href [routerLink]="['/movies']" routerLinkActive="active" class="nav-item">Movies</a>
+  <a href [routerLink]="['/tv-shows']" routerLinkActive="active" class="nav-item">TV Shows</a>
+  <a href [routerLink]="['/people']" routerLinkActive="active" class="nav-item">People</a>
+  
+  <div class="logo-bg"></div>
+  <div class="slider" #slider></div>
+</mat-toolbar>

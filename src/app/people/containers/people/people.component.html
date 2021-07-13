@@ -1,0 +1,9 @@
+<div class="title">
+  <h1>{{ searchTerm ? '' : 'Trending ' }}People {{ searchTerm ? '- "' + searchTerm + '"' : '' }}</h1>
+</div>
+<div class="search-wrapper">
+  <tmdb-search-bar (valueChange)="search($event)"></tmdb-search-bar>
+</div>
+<div class="people-wrapper">
+  <tmdb-card [@appear] *ngFor="let person of people$ | async" [cardData]="person"></tmdb-card>
+</div>

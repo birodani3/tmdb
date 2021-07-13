@@ -1,0 +1,36 @@
+mat-toolbar {
+  padding: 0 16px;
+  position: relative;
+  display: flex;
+
+  .logo {
+    margin-right: 64px;
+    padding: 0 8px;
+    font-weight: bold;
+    border-radius: 4px;
+    z-index: 2;
+  }
+
+  .logo-bg {
+    width: 72px;
+    height: 32px;
+    position: absolute;
+    left: 15px;
+    border-radius: 4px;
+    background: #351947;
+  }
+
+  .slider {
+    height: 32px;
+    width: 70px;
+    position: absolute;
+    background: var(--ten-purple);
+    border-radius: 4px;
+    transition: all .3s ease-in-out;
+  }
+
+  .nav-item {
+    padding: 0 8px;
+    z-index: 2;
+  }
+}
