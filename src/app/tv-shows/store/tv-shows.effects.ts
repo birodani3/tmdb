@@ -20,7 +20,14 @@ export class TvShowsEffects {
       ofType(tvShowsInitAction, tvShowsSearchTermChangeAction, tvShowsLoadNextPageAction),
       withLatestFrom(this.store.select(selectTvShowsState)),
       filter(([action, tvShowsState]) => {
-        return action.type === tvShowsLoadNextPageAction.type ? tvShowsState.totalPages >= tvShowsState.page : true;
+        switch (action.type) {
+          case tvShowsLoadNextPageAction.type:
+            return tvShowsState.totalPages >= tvShowsState.page;
+          case tvShowsInitAction.type:
+            return !tvShowsState.tvShows.length;
+          default:
+            return true;
+        }
       }),
       switchMap(([action, tvShowsState]) => {
         return tvShowsState.searchTerm

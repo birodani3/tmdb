@@ -4,7 +4,7 @@
   </h1>
 </div>
 <div class="search-wrapper">
-  <tmdb-search-bar (valueChange)="search($event)"></tmdb-search-bar>
+  <tmdb-search-bar [value]="searchTerm$ | async" (valueChange)="search($event)"></tmdb-search-bar>
 </div>
 <div class="movies-wrapper">
   <tmdb-card [@appear] *ngFor="let movie of movies$ | async" [cardData]="movie"></tmdb-card>

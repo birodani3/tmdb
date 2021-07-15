@@ -20,7 +20,14 @@ export class MoviesEffects {
       ofType(moviesInitAction, moviesSearchTermChangeAction, moviesLoadNextPageAction),
       withLatestFrom(this.store.select(selectMoviesState)),
       filter(([action, moviesState]) => {
-        return action.type === moviesLoadNextPageAction.type ? moviesState.totalPages >= moviesState.page : true;
+        switch (action.type) {
+          case moviesLoadNextPageAction.type:
+            return moviesState.totalPages >= moviesState.page;
+          case moviesInitAction.type:
+            return !moviesState.movies.length;
+          default:
+            return true;
+        }
       }),
       switchMap(([action, moviesState]) => {
         return moviesState.searchTerm

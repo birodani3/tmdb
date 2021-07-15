@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Output, OnDestroy, EventEmitter } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Output, OnDestroy, EventEmitter, Input } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -13,7 +13,8 @@ import { debounceTime, takeUntil } from 'rxjs/operators';
 export class SearchBarComponent implements OnDestroy {
   @Output()
   public valueChange = new EventEmitter();
-  public value = '';
+  @Input()
+  public value: string | null = '';
   public focused = false;
   private value$ = new Subject<string>();
   private destroy$ = new Subject<void>();

@@ -20,7 +20,14 @@ export class PeopleEffects {
       ofType(peopleInitAction, peopleSearchTermChangeAction, peopleLoadNextPageAction),
       withLatestFrom(this.store.select(selectPeopleState)),
       filter(([action, peopleState]) => {
-        return action.type === peopleLoadNextPageAction.type ? peopleState.totalPages >= peopleState.page : true;
+        switch (action.type) {
+          case peopleLoadNextPageAction.type:
+            return peopleState.totalPages >= peopleState.page;
+          case peopleInitAction.type:
+            return !peopleState.people.length;
+          default:
+            return true;
+        }
       }),
       switchMap(([action, peopleState]) => {
         return peopleState.searchTerm
