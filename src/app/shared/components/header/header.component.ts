@@ -6,6 +6,7 @@ import { fromEvent, merge, Observable, timer } from 'rxjs';
 import { filter, map, } from 'rxjs/operators';
 
 import { bouncySlider } from '../../animations';
+import { LoadingService } from '../../services/loading.service';
 
 @Component({
   selector: 'tmdb-header',
@@ -20,8 +21,11 @@ export class HeaderComponent {
   public slider!: ElementRef;
   @ViewChildren(RouterLinkActive, { read: ElementRef })
   public links!: QueryList<ElementRef>;
+  public loading$: Observable<boolean>;
 
-  constructor(private animationBuilder: AnimationBuilder, private router: Router) {}
+  constructor(private animationBuilder: AnimationBuilder, private loadingService: LoadingService) {
+    this.loading$ = this.loadingService.loading$;
+  }
 
   public ngAfterViewInit(): void {
     // Timer is needed here because angular's routerLinkActive directive does not set the class in time

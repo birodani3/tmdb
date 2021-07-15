@@ -33,4 +33,9 @@ mat-toolbar {
     padding: 0 8px;
     z-index: 2;
   }
+
+  mat-progress-bar {
+    position: absolute;
+    bottom: 0;
+  }
 }

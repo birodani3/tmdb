@@ -1,10 +1,13 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, HostListener, OnDestroy } from '@angular/core';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
 
-import { MediaType, TimeWindow } from '../../../shared/models';
-import { DaoService } from '../../../shared/services/dao.service';
+import { Subject } from 'rxjs';
+import { takeUntil, throttleTime } from 'rxjs/operators';
+
+import { peopleInitAction, peopleLoadNextPageAction, peopleSearchTermChangeAction } from '../../store/people.actions';
+import { selectPeople, selectPeopleSearchTerm, selectPeopleTotalResults } from '../../store/people.selector';
+import { PeopleState } from '../../store/people.state';
 import { appear } from '../../../shared/animations';
 
 @Component({
@@ -14,27 +17,37 @@ import { appear } from '../../../shared/animations';
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [appear],
 })
-export class PeopleComponent {
-  public people$: Observable<any[]> | undefined;
-  public searchTerm: string | undefined;
+export class PeopleComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
+  private bottom$ = new Subject<void>();
+  public totalResults$ = this.store.select(selectPeopleTotalResults);
+  public searchTerm$ = this.store.select(selectPeopleSearchTerm);
+  public people$ = this.store.select(selectPeople);
   
-  constructor(private dao: DaoService) {
-    this.search();
+  constructor(private store: Store<PeopleState>) {
+    this.store.dispatch(peopleInitAction());
+
+    this.bottom$.pipe(
+      throttleTime(500),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.store.dispatch(peopleLoadNextPageAction());
+    });
   }
 
-  public search(searchTerm?: string): void {
-    const request = searchTerm ? this.dao.searchPeople(searchTerm) : this.dao.getTrending(MediaType.Person, TimeWindow.Week);
+  @HostListener('window:scroll')
+  public onScroll() {
+    if ((window.innerHeight + window.scrollY) >= document.documentElement.offsetHeight) {
+      this.bottom$.next();
+    }
+  }
 
-    this.searchTerm = searchTerm;
-    this.people$ = request.pipe(
-      map(resp => {
-        return (<any[]>resp.results).map(result => ({
-          id: result.id,
-          title: result.name,
-          overview: result.overview,
-          background: `https://image.tmdb.org/t/p/w500${result.profile_path}`
-        }))
-      })
-    );
+  public search(searchTerm: string): void {
+    this.store.dispatch(peopleSearchTermChangeAction({ searchTerm }));
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

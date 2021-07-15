@@ -1,11 +1,14 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, HostListener, ChangeDetectionStrategy } from '@angular/core';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { MediaType, TimeWindow } from 'src/app/shared/models';
+import { Store } from '@ngrx/store';
 
+import { Subject } from 'rxjs';
+import { takeUntil, throttleTime } from 'rxjs/operators';
+
+import { tvShowsInitAction, tvShowsLoadNextPageAction, tvShowsSearchTermChangeAction } from '../../store/tv-shows.actions';
+import { selectTvShows, selectTvShowsSearchTerm, selectTvShowsTotalResults } from '../../store/tv-shows.selector';
+import { TvShowsState } from '../../store/tv-shows.state';
 import { appear } from '../../../shared/animations';
-import { DaoService } from '../../../shared/services/dao.service';
 
 @Component({
   selector: 'tmdb-tv-shows',
@@ -15,27 +18,36 @@ import { DaoService } from '../../../shared/services/dao.service';
   animations: [appear]
 })
 export class TvShowsComponent {
-  public tvShows$: Observable<any[]> | undefined;
-  public searchTerm: string | undefined;
+  private destroy$ = new Subject<void>();
+  private bottom$ = new Subject<void>();
+  public totalResults$ = this.store.select(selectTvShowsTotalResults);
+  public searchTerm$ = this.store.select(selectTvShowsSearchTerm);
+  public tvShows$ = this.store.select(selectTvShows);
   
-  constructor(private dao: DaoService) {
-    this.search();
+  constructor(private store: Store<TvShowsState>) {
+    this.store.dispatch(tvShowsInitAction());
+
+    this.bottom$.pipe(
+      throttleTime(500),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.store.dispatch(tvShowsLoadNextPageAction());
+    });
   }
 
-  public search(searchTerm?: string): void {
-    this.searchTerm = searchTerm;
-
-    this.tvShows$ = (searchTerm ? this.dao.searchTvShows(searchTerm) : this.dao.getTrending(MediaType.Tv, TimeWindow.Week)).pipe(
-      map(resp => {
-        return (<any[]>resp.results).map(result => ({
-          id: result.id,
-          title: result.original_name,
-          vote: result.vote_average,
-          overview: result.overview,
-          background: `https://image.tmdb.org/t/p/w500${result.poster_path}`
-        }))
-      })
-    );
+  @HostListener('window:scroll')
+  public onScroll() {
+    if ((window.innerHeight + window.scrollY) >= document.documentElement.offsetHeight) {
+      this.bottom$.next();
+    }
   }
 
+  public search(searchTerm: string): void {
+    this.store.dispatch(tvShowsSearchTermChangeAction({ searchTerm }));
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

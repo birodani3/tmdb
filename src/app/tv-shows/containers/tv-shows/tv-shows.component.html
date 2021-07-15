@@ -1,5 +1,7 @@
-<div class="title">
-  <h1>{{ searchTerm ? '' : 'Trending ' }}Tv Shows {{ searchTerm ? '- "' + searchTerm + '"' : '' }}</h1>
+<div class="title" *ngrxLet="searchTerm$ as searchTerm">
+  <h1>
+    {{ searchTerm ? '' : 'Trending ' }}Tv Shows {{ searchTerm ? '- "' + searchTerm + '"' : '' }} - {{ totalResults$ | async }} results
+  </h1>
 </div>
 <div class="search-wrapper">
   <tmdb-search-bar (valueChange)="search($event)"></tmdb-search-bar>

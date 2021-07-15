@@ -12,23 +12,23 @@ export class DaoService {
 
   constructor(private http: HttpClient) { }
 
-  public getTrending(mediaType: MediaType, timeWindow: TimeWindow): Observable<any> {
-    return this.get(`/trending/${mediaType}/${timeWindow}`);
+  public getTrending(mediaType: MediaType, timeWindow: TimeWindow, page = 1): Observable<any> {
+    return this.get(`/trending/${mediaType}/${timeWindow}?page=${page}`);
   }
 
-  public searchMovies(searchTerm: string): Observable<any> {
-    return this.get(`/search/movie?query=${searchTerm}`);
+  public searchMovies(searchTerm: string, page = 1): Observable<any> {
+    return this.get(`/search/movie?query=${searchTerm}&page=${page}`);
   }
 
-  public searchTvShows(searchTerm: string): Observable<any> {
-    return this.get(`/search/tv?query=${searchTerm}`);
+  public searchTvShows(searchTerm: string, page = 1): Observable<any> {
+    return this.get(`/search/tv?query=${searchTerm}&page=${page}`);
   }
 
-  public searchPeople(searchTerm: string): Observable<any> {
-    return this.get(`/search/person?query=${searchTerm}`);
+  public searchPeople(searchTerm: string, page = 1): Observable<any> {
+    return this.get(`/search/person?query=${searchTerm}&page=${page}`);
   }
 
   private get<T>(url: string): Observable<T> {
-    return this.http.get<T>(`${this.BASE_URL}${url}${url.includes('?') ? '&' : '?'}api_key=${this.API_KEY}`);
+    return this.http.get<T>(`${this.BASE_URL}${url}&api_key=${this.API_KEY}`);
   }
 }

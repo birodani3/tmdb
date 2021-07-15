@@ -9,6 +9,10 @@ html, body {
   font-family: 'Roboto';
 }
 
+*:focus {
+  outline: none;
+}
+
 .clickable {
   cursor: pointer;
 }
@@ -18,6 +22,6 @@ a {
   color: inherit;
 }
 
-*:focus {
-  outline: none;
+.mat-progress-bar-fill::after {
+  background-color: var(--ten-purple);
 }

@@ -1,10 +1,13 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, HostListener, OnDestroy } from '@angular/core';
 
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
 
-import { MediaType, TimeWindow } from '../../../shared/models';
-import { DaoService } from '../../../shared/services/dao.service';
+import { Subject } from 'rxjs';
+import { takeUntil, throttleTime } from 'rxjs/operators';
+
+import { moviesInitAction, moviesSearchTermChangeAction, moviesLoadNextPageAction } from '../../store/movies.actions';
+import { selectMovies, selectMoviesSearchTerm, selectMoviesTotalResults } from '../../store/movies.selector';
+import { MoviesState } from '../../store/movies.state';
 import { appear } from '../../../shared/animations';
 
 @Component({
@@ -14,28 +17,37 @@ import { appear } from '../../../shared/animations';
   changeDetection: ChangeDetectionStrategy.OnPush,
   animations: [appear],
 })
-export class MoviesComponent {
-  public movies$: Observable<any[]> | undefined;
-  public searchTerm: string | undefined;
+export class MoviesComponent implements OnDestroy {
+  private destroy$ = new Subject<void>();
+  private bottom$ = new Subject<void>();
+  public totalResults$ = this.store.select(selectMoviesTotalResults);
+  public searchTerm$ = this.store.select(selectMoviesSearchTerm);
+  public movies$ = this.store.select(selectMovies);
   
-  constructor(private dao: DaoService) {
-    this.search();
+  constructor(private store: Store<MoviesState>) {
+    this.store.dispatch(moviesInitAction());
+
+    this.bottom$.pipe(
+      throttleTime(500),
+      takeUntil(this.destroy$)
+    ).subscribe(() => {
+      this.store.dispatch(moviesLoadNextPageAction());
+    });
   }
 
-  public search(searchTerm?: string): void {
-    const request = searchTerm ? this.dao.searchMovies(searchTerm) : this.dao.getTrending(MediaType.Movie, TimeWindow.Week);
+  @HostListener('window:scroll')
+  public onScroll() {
+    if ((window.innerHeight + window.scrollY) >= document.documentElement.offsetHeight) {
+      this.bottom$.next();
+    }
+  }
 
-    this.searchTerm = searchTerm;
-    this.movies$ = request.pipe(
-      map(resp => {
-        return (<any[]>resp.results).map(result => ({
-          id: result.id,
-          title: result.original_title,
-          vote: result.vote_average,
-          overview: result.overview,
-          background: `https://image.tmdb.org/t/p/w500${result.poster_path}`
-        }))
-      })
-    );
+  public search(searchTerm: string): void {
+    this.store.dispatch(moviesSearchTermChangeAction({ searchTerm }));
+  }
+
+  public ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 }

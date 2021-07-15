@@ -6,4 +6,5 @@
   
   <div class="logo-bg"></div>
   <div class="slider" #slider></div>
+  <mat-progress-bar *ngIf="loading$ | async" mode="indeterminate"></mat-progress-bar>
 </mat-toolbar>
