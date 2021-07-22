@@ -28,7 +28,13 @@ export class DaoService {
     return this.get(`/search/person?query=${searchTerm}&page=${page}`);
   }
 
+  public getMovie(movieId: string): Observable<any> {
+    return this.get(`/movie/${movieId}`);
+  }
+
   private get<T>(url: string): Observable<T> {
-    return this.http.get<T>(`${this.BASE_URL}${url}&api_key=${this.API_KEY}`);
+    const paramDelimiter = url.includes('?') ? '&' : '?';
+
+    return this.http.get<T>(`${this.BASE_URL}${url}${paramDelimiter}api_key=${this.API_KEY}`);
   }
 }

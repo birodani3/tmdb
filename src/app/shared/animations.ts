@@ -23,6 +23,48 @@ export const appear = trigger('appear', [
 ]);
 
 export const slideIn = trigger('slideIn', [
+  transition('* => Details',  [
+		style({ position: 'relative' }),
+		query(':enter, :leave', [
+			style({
+				position: 'absolute',
+				top: 0,
+				right: 0,
+				width: '100%',
+			})
+		]),
+		query(':enter', [style({ transform: 'translateY(100%)', opacity: 1 })]),
+		query(':leave', animateChild(), { optional: true }),
+		group([
+			query(':leave', [animate('.4s ease-out', style({ transform: 'translateY(-100%)', opacity: 0 }))], { optional: true }),
+			query(':enter', [
+        animate('.4s ease-out', style({ transform: 'translateY(0)' })),
+        animate('.5s ease-out', style({ opacity: 1 }))
+      ])
+		]),
+		query(':enter', animateChild())
+	]),
+  transition('Details => *',  [
+		style({ position: 'relative' }),
+		query(':enter, :leave', [
+			style({
+				position: 'absolute',
+				top: 0,
+				right: 0,
+				width: '100%',
+			})
+		]),
+		query(':enter', [style({ transform: 'translateY(-100%)', opacity: 1 })]),
+		query(':leave', animateChild(), { optional: true }),
+		group([
+			query(':leave', [animate('.4s ease-out', style({ transform: 'translateY(100%)', opacity: 0 }))], { optional: true }),
+			query(':enter', [
+        animate('.4s ease-out', style({ transform: 'translateY(0)' })),
+        animate('.5s ease-out', style({ opacity: 1 }))
+      ])
+		]),
+		query(':enter', animateChild())
+	]),
   transition('First => Second, First => Third, First => Fourth, Second => Third, Second => Fourth, Third => Fourth',  [
 		style({ position: 'relative' }),
 		query(':enter, :leave', [

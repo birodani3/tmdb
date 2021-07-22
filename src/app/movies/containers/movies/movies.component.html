@@ -7,5 +7,5 @@
   <tmdb-search-bar [value]="searchTerm$ | async" (valueChange)="search($event)"></tmdb-search-bar>
 </div>
 <div class="movies-wrapper">
-  <tmdb-card [@appear] *ngFor="let movie of movies$ | async" [cardData]="movie"></tmdb-card>
+  <tmdb-card [@appear] *ngFor="let movie of movies$ | async" [cardData]="movie" [routerLink]="['/movies/' + movie.id]"></tmdb-card>
 </div>

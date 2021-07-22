@@ -11,10 +11,12 @@ import { MoviesComponent } from './containers/movies/movies.component';
 import { MoviesEffects } from './store/movies.effects';
 import { moviesReducer } from './store/movies.reducer';
 import { SharedModule } from '../shared/shared.module';
+import { MovieComponent } from './components/movie/movie.component';
 
 @NgModule({
   declarations: [
-    MoviesComponent
+    MoviesComponent,
+    MovieComponent
   ],
   imports: [
     StoreModule.forFeature('movies', moviesReducer),
