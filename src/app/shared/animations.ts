@@ -54,10 +54,10 @@ export const slideIn = trigger('slideIn', [
 				width: '100%',
 			})
 		]),
-		query(':enter', [style({ transform: 'translateY(100vh)', opacity: 0 })]),
+		query(':enter', [style({ transform: 'translateY(-100vh)', opacity: 0 })]),
 		query(':leave', animateChild(), { optional: true }),
 		group([
-			query(':leave', [animate('.4s ease-out', style({ transform: 'translateY(-100vh)', opacity: 0 }))], { optional: true }),
+			query(':leave', [animate('.4s ease-out', style({ transform: 'translateY(100vh)', opacity: 0 }))], { optional: true }),
 			query(':enter', group([
         animate('.5s ease-out', style({ opacity: 1 })),
         animate('.4s ease-out', style({ transform: 'translateY(0)' })),
