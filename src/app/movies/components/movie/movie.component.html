@@ -1,25 +1,25 @@
-<div class="movie-wrapper" *ngIf="movie$ | async as movie">
+<div class="movie-wrapper" *ngrxLet="movie$ as movie">
   <div class="images-wrapper">
-    <img class="backdrop" [src]="'https://image.tmdb.org/t/p/original/' + movie.backdrop_path" alt="movie backdrop">
-    <img class="poster" [src]="'https://image.tmdb.org/t/p/w500/' + movie.poster_path" alt="movie poster">
+    <img class="backdrop" [src]="'https://image.tmdb.org/t/p/original/' + movie?.backdrop_path" alt="movie backdrop">
+    <img class="poster" [src]="'https://image.tmdb.org/t/p/w500/' + movie?.poster_path" alt="movie poster">
   </div>
   <div class="content-wrapper">
     <div class="top">
-      <div class="title">{{ movie.title }}</div>
+      <div class="title">{{ movie?.title }}</div>
       <div class="stats">
-        <div class="runtime">{{ movie.runtime }} mins</div>
-        <div>{{ movie.genreNames }}</div>
+        <div class="runtime">{{ movie?.runtime }} mins</div>
+        <div>{{ movie?.genreNames }}</div>
       </div>
       <div class="votes">
         <div class="stars">
           <mat-icon>stars</mat-icon>
-          <div class="number">{{ movie.vote_average | number:'1.1-1' }}</div>
+          <div class="number">{{ movie?.vote_average | number:'1.1-1' }}</div>
         </div>
-        <div class="reviewed">{{ movie.vote_count }} reviewed</div>
+        <div class="reviewed">{{ movie?.vote_count }} reviewed</div>
       </div>
     </div>
     <div class="bottom">
-      <div class="overview">{{ movie.overview }}</div>
+      <div class="overview">{{ movie?.overview }}</div>
     </div>
   </div>
 </div>
