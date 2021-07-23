@@ -1,4 +1,4 @@
-import { animate, animateChild, group, keyframes, query, state, style, transition, trigger } from '@angular/animations';
+import { animate, animateChild, group, keyframes, query, style, transition, trigger } from '@angular/animations';
 
 export const bouncySlider = ({ left, width }: { left: number; width: number }) => [
   group([
@@ -33,14 +33,14 @@ export const slideIn = trigger('slideIn', [
 				width: '100%',
 			})
 		]),
-		query(':enter', [style({ transform: 'translateY(100%)', opacity: 1 })]),
+		query(':enter', [style({ transform: 'translateY(100vh)', opacity: 1 })]),
 		query(':leave', animateChild(), { optional: true }),
 		group([
-			query(':leave', [animate('.4s ease-out', style({ transform: 'translateY(-100%)', opacity: 0 }))], { optional: true }),
-			query(':enter', [
+			query(':leave', [animate('.4s ease-out', style({ transform: 'translateY(-100vh)', opacity: 0 }))], { optional: true }),
+			query(':enter', group([
+        animate('.5s ease-out', style({ opacity: 1 })),
         animate('.4s ease-out', style({ transform: 'translateY(0)' })),
-        animate('.5s ease-out', style({ opacity: 1 }))
-      ])
+      ]))
 		]),
 		query(':enter', animateChild())
 	]),
@@ -54,14 +54,14 @@ export const slideIn = trigger('slideIn', [
 				width: '100%',
 			})
 		]),
-		query(':enter', [style({ transform: 'translateY(-100%)', opacity: 1 })]),
+		query(':enter', [style({ transform: 'translateY(100vh)', opacity: 0 })]),
 		query(':leave', animateChild(), { optional: true }),
 		group([
-			query(':leave', [animate('.4s ease-out', style({ transform: 'translateY(100%)', opacity: 0 }))], { optional: true }),
-			query(':enter', [
+			query(':leave', [animate('.4s ease-out', style({ transform: 'translateY(-100vh)', opacity: 0 }))], { optional: true }),
+			query(':enter', group([
+        animate('.5s ease-out', style({ opacity: 1 })),
         animate('.4s ease-out', style({ transform: 'translateY(0)' })),
-        animate('.5s ease-out', style({ opacity: 1 }))
-      ])
+      ]))
 		]),
 		query(':enter', animateChild())
 	]),
