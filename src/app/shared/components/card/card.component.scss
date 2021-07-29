@@ -3,6 +3,7 @@
   display: flex;
   position: relative;
   align-items: flex-end;
+  overflow: hidden;
   transition: all .3s ease-in-out;
 
   .background,
@@ -22,6 +23,10 @@
     background-position: center;
   }
 
+  .background-shine {
+    display: none;
+  }
+
   .content {
     width: 100%;
     padding: 8px;
@@ -34,5 +39,28 @@
   &:hover {
     transform: scale(1.03);
     box-shadow: 0 0 10px 2px #999;
+
+    .background-shine {
+      display: block;
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      animation: shine 1.5s infinite linear;
+      transform: rotate(45deg);
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(215, 215, 215, 0.3) 50%, rgba(255, 255, 255, 0) 100%);
+      background-size: 200% 200%;
+    }
+  }
+}
+
+@keyframes shine {
+  0% {
+    background-position: 100% 100%;
+  }
+  
+  100% {
+    background-position: -100% -100%;
   }
 }

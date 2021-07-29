@@ -1,5 +1,6 @@
 <div class="card-wrapper clickable">
   <img class="background" (load)="imageLoaded = true;" [src]="cardData.background"/>
+  <div class="background-shine"></div>
   <div class="background-placeholder" *ngIf="!imageLoaded"></div>
   <div class="content">
     <div>{{ cardData.title }}</div>
